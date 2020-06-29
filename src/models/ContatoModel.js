@@ -6,7 +6,8 @@ const ContatoSchema = new mongoose.Schema({
   sobrenome: { type: String, required: true, default: '' },
   email: { type: String, required: false, default: '' },
   telefone: { type: String, required: false, default: '' },
-  criadoEm: { type: Date, default: Date.now }
+  criadoEm: { type: Date, default: Date.now },
+  responsavel: { type: String },
 });
 
 const ContatoModel = mongoose.model('Contato', ContatoSchema);
@@ -28,6 +29,10 @@ Contato.prototype.register = async function() {
 // Método que faz a válidação dos campos
 Contato.prototype.valida = function() {
   this.cleanUp();
+
+  if(!this.body.responsavel) {
+    this.errors.push('Responsável inválido.');
+  }
 
   if(this.body.email && !validator.isEmail(this.body.email)) {
     this.errors.push('E-mail inválido!');
@@ -54,7 +59,8 @@ Contato.prototype.cleanUp = function() {
     nome: this.body.nome,
     sobrenome: this.body.sobrenome,
     email: this.body.email,
-    telefone: this.body.telefone
+    telefone: this.body.telefone,
+    responsavel: this.body.responsavel,
   };
 };
 

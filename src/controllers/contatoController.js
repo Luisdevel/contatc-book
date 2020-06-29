@@ -9,7 +9,7 @@ exports.index = (request, response) => {
 // Registra usuário
 exports.register = async (request, response) => {
     try {
-        const contato = new Contato(request.body);
+        const contato = new Contato({ ...request.body, responsavel: request.session.user._id });
         await contato.register();
     
         if(contato.errors.length > 0) {
